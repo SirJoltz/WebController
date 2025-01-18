@@ -46,6 +46,9 @@
         let currentDirection = '';
         let isHolding = false;
 
+        // API endpoint where Unity is listening for input
+        const apiUrl = 'http://localhost:5000/input'; // Change the URL based on Unity's server
+
         // Get references to buttons
         const leftButton = document.getElementById('leftButton');
         const rightButton = document.getElementById('rightButton');
@@ -76,7 +79,8 @@
             if (!isHolding) {
                 currentDirection = direction;
                 updateDirection();
-                isHolding = true;  // Prevent setting direction multiple times
+                sendDirectionToUnity(direction); // Send to Unity
+                isHolding = true;
             }
         }
 
@@ -85,6 +89,7 @@
             if (isHolding) {
                 currentDirection = '';
                 updateDirection();
+                sendDirectionToUnity('None'); // Send to Unity
                 isHolding = false;
             }
         }
@@ -92,6 +97,20 @@
         // Update the displayed direction
         function updateDirection() {
             directionDisplay.textContent = `Selected Direction: ${currentDirection || 'None'}`;
+        }
+
+        // Send the current direction to Unity via HTTP request (POST)
+        function sendDirectionToUnity(direction) {
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ direction: direction })
+            })
+            .then(response => response.json())
+            .then(data => console.log('Direction sent to Unity:', data))
+            .catch((error) => console.error('Error:', error));
         }
     </script>
 
