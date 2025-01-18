@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direction Buttons</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: 2px solid #007BFF;
+            background-color: #f0f8ff;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #007BFF;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Choose a Direction (Hold to Set)</h1>
+    <div class="button-container">
+        <button id="leftButton">Left</button>
+        <button id="rightButton">Right</button>
+        <button id="forwardButton">Forward</button>
+        <button id="backButton">Back</button>
+    </div>
+
+    <p id="selectedDirection">Selected Direction: None</p>
+
+    <script>
+        // Initialize the variable to store the direction
+        let currentDirection = '';
+        let isHolding = false;
+
+        // Get references to buttons
+        const leftButton = document.getElementById('leftButton');
+        const rightButton = document.getElementById('rightButton');
+        const forwardButton = document.getElementById('forwardButton');
+        const backButton = document.getElementById('backButton');
+
+        // Get reference to the paragraph to display selected direction
+        const directionDisplay = document.getElementById('selectedDirection');
+
+        // Add event listeners for mousedown (button press) and mouseup (button release)
+        leftButton.addEventListener('mousedown', () => setDirection('Left'));
+        rightButton.addEventListener('mousedown', () => setDirection('Right'));
+        forwardButton.addEventListener('mousedown', () => setDirection('Forward'));
+        backButton.addEventListener('mousedown', () => setDirection('Back'));
+
+        leftButton.addEventListener('mouseup', clearDirection);
+        rightButton.addEventListener('mouseup', clearDirection);
+        forwardButton.addEventListener('mouseup', clearDirection);
+        backButton.addEventListener('mouseup', clearDirection);
+
+        leftButton.addEventListener('mouseleave', clearDirection);
+        rightButton.addEventListener('mouseleave', clearDirection);
+        forwardButton.addEventListener('mouseleave', clearDirection);
+        backButton.addEventListener('mouseleave', clearDirection);
+
+        // Set the direction while the button is pressed
+        function setDirection(direction) {
+            if (!isHolding) {
+                currentDirection = direction;
+                updateDirection();
+                isHolding = true;  // Prevent setting direction multiple times
+            }
+        }
+
+        // Clear the direction when the button is released
+        function clearDirection() {
+            if (isHolding) {
+                currentDirection = '';
+                updateDirection();
+                isHolding = false;
+            }
+        }
+
+        // Update the displayed direction
+        function updateDirection() {
+            directionDisplay.textContent = `Selected Direction: ${currentDirection || 'None'}`;
+        }
+    </script>
+
+</body>
+</html>
